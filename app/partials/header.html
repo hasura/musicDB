@@ -3,9 +3,9 @@
         <h2>Search artist</h2>
         <div id="custom-search-input">
             <div class="input-group col-md-12">
-                <input type="text" class="form-control input-lg" placeholder="Buscar" ng-model="searchQuery"/>
+                <input type="text" class="form-control input-lg" placeholder="Coldplay" ng-init="searchQuery='Coldplay'" ng-model="searchQuery"/>
                 <span class="input-group-btn">
-                <button class="btn btn-info btn-lg" type="button" ng-click="search();">
+                <button class="btn btn-info btn-lg" type="button" ng-click="searchArtist(searchQuery)">
                     <i class="glyphicon glyphicon-search"></i>
                 </button>
                 </span>

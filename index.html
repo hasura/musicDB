@@ -6,19 +6,18 @@
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="app/css/main.css">
   </head>
-  <body ng-contoller="PageCtrl">
+  <body ng-controller="PageCtrl">
     <div class="container">
 
-      <mdb-header class="col-centered"></mdb-header>
-      
-      <div ng-view></div>
+      <ng-include src="'app/partials/header.html'"></ng-include>
+      <ng-view></ng-view>
 
     </div>
+
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-route/angular-route.min.js"></script>
     <script src="app/js/main.js"></script>
-    <script src="app/js/directives.js"></script>
   </body>
 </html>
