@@ -1,23 +1,147 @@
 <!doctype html>
 <html ng-app="musicdb">
-  <head>
+<head>
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta content="utf-8" http-equiv="encoding">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="app/css/main.css">
-  </head>
-  <body ng-controller="PageCtrl">
-    <div class="container">
+</head>
+<body ng-controller="PageCtrl">
 
-      <ng-include src="'app/partials/header.html'"></ng-include>
-      <ng-view></ng-view>
+    <div class="container">
+        
+        <div class="row section">
+            <div class="col-md-8">
+                    <h2>Search artist</h2>
+                    <div id="custom-search-input">
+                        <div class="input-group col-md-12">
+                            <input type="text" class="form-control input-lg" placeholder="Coldplay" ng-init="searchQuery='Coldplay'" ng-model="searchQuery"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-info btn-lg" type="button" ng-click="searchArtist(searchQuery)">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <span> E.g. Coldplay, Metallica</span>
+                    </div>
+                    <div ng-hide="artistPresent" class="row list-result" ng-repeat="row in artistResults">
+                        <a href ng-click="getArtist(row.id)">{{row.name}}</a>
+                    </div>
+
+                    <div ng-show="artistPresent">
+                        <h3> {{artist.name}} </h3>
+                        <ul class="list-inline">
+                           <li ng-repeat="tag in artist.tags"> {{tag.name}} </li>
+                        </ul>
+                        <h4> Discography </h4>
+                        <table class="table">
+                        <thead>
+                            <tr>
+                                <th> Year </th>
+                                <th> Name </th>
+                                <th> Rating </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="release in artist.release_groups">
+                                <td> {{release.meta.first_release_date_year}} </td>
+                                <td> {{release.name}} </td>
+                                <td> {{release.meta.rating}} </td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>
+
+                    <div ng-show="artistResults.length == 0 && !artistPresent" class="list-result">
+                        <span> Sorry, no artist found </span>
+                    </div> 
+                </div>
+
+            <div class="col-md-4">
+                <pre>This is a search query</pre>
+            </div>    
+        </div>
+
+        <div class="row section">
+            <div class="col-md-8">
+                <h2>Tags</h2>
+                <div ng-show="!tagExpanded" class="tag-cloud">
+                    <ul class="list-inline">
+                       <li ng-repeat="tag in tagCloud"> <a href ng-click="getTagDetails(tag.id)">{{tag.name}}</a></li>
+                    </ul>
+                </div>
+
+                <div ng-show="tagExpanded">
+                    <a href ng-click="tagExpanded=!tagExpanded;">&larr; All tags</a>
+                    <h4>Tag: {{tagDetails.name}}</h4>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <table>
+                            <thead>
+                                <tr>
+                                    <th>Artists</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="artist in artistsTag">
+                                    <td>{{artist.artist_details.name}}</td>
+                                </tr>
+                            </tbody>
+                            </table>
+
+                        </div>
+                        <div class="col-md-6">
+                            <table>
+                            <thead>
+                                <tr>
+                                    <th>Events</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="event in eventsTag">
+                                    <td>{{event.event_details.name}}</td>
+                                </tr>
+                            </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <pre>This shows a multi query to display data from 2 tables</pre>
+            </div>
+        </div>
+
+        <div class="row section">
+                <div class="col-md-8">
+                    <h2>Recent Additions</h2>
+                </div>
+
+                <div class="col-md-4">
+                    <pre> This is another query</pre>
+                </div>
+        </div>            
+
+
+        <div class="row section">
+            <div class="col-md-8">
+                <h2>Analytics</h2>
+            </div>
+
+            <div clas="col-md-4">
+                <pre>This is another query </pre>
+            </div>
+        </div>
+
 
     </div>
 
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/angular/angular.min.js"></script>
-    <script src="bower_components/angular-route/angular-route.min.js"></script>
     <script src="app/js/main.js"></script>
-  </body>
+</body>
 </html>

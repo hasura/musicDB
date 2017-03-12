@@ -2,3 +2,14 @@
     float: none;
     margin: 0 auto;
 }
+
+.section{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-bottom: solid 1px #f4f7f8;
+}
+
+.list-result {
+
+  margin-top: 40px;
+}
