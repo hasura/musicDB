@@ -256,7 +256,11 @@ app.controller('PageCtrl', ['$scope', '$location', '$http', function ($scope, $l
               "first_release_date_day",
               {
                 "name": "parent",
-                "columns": [ "name" ]
+                "columns": [
+                  "name",
+                  {"name" : "artist",
+                   "columns": ["id", "name"]
+                  }]
               }
             ],
             "order_by": [{"column" : "first_release_date_year", "order": "desc"},
@@ -287,6 +291,62 @@ app.controller('PageCtrl', ['$scope', '$location', '$http', function ($scope, $l
   $scope.getDate = function(release) {
     return new Date(release.first_release_date_year, release.first_release_date_month, release.first_release_date_day);
   }
+
+    var req = {
+      method: 'POST',
+      url: dataUrl,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        "type": "select",
+        "args": {
+            "table": "tag_stats_view",
+            "columns": [ "*.*"],
+        }
+      }
+    }
+
+    $http(req).then(
+    function success(res){
+      console.log('inside analytics');
+      console.log(res.data);
+
+      var data = res.data;
+      var formattedData = {};
+
+      res.data.forEach(function(r) {
+        if(formattedData[r.tag]) {
+          formattedData[r.tag].data.push({x: r.first_release_date_year, y: r.count})
+        }
+        else {
+          formattedData[r.tag] = {"label": r.tag_details.name, "data": [{x: r.first_release_date_year, y: r.count}]}
+        }
+      })
+
+      console.log(formattedData);
+
+      var ctx = $("#myChart");
+
+      var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: Object.values(formattedData)
+        },
+        options: {
+            scales: {
+                xAxes: [{
+                    type: 'linear',
+                    position: 'bottom'
+                }]
+            }
+        }
+      });
+   },
+
+    function error(data){
+      console.log(data);
+    });
 
 }]);
 
