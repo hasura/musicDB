@@ -27,6 +27,8 @@ app.controller('PageCtrl', ['$scope', '$location', '$http', function ($scope, $l
   $scope.results =[];
   $scope.categories = [];
   $scope.tagExpanded = false;
+  $scope.latestReleases = [];
+  $scope.currentOffset = 0;
 
   $scope.searchArtist = function(artist) {
     console.log("inside searchArtist");
@@ -233,6 +235,57 @@ app.controller('PageCtrl', ['$scope', '$location', '$http', function ($scope, $l
       console.log(data);
     });
 
+  }
+
+  $scope.getLatestReleases = function(offset) {
+
+    var req = {
+      method: 'POST',
+      url: dataUrl,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        "type": "select",
+        "args": {
+            "table": "release_group_meta",
+            "columns": [
+              "id",
+              "first_release_date_year",
+              "first_release_date_month",
+              "first_release_date_day",
+              {
+                "name": "parent",
+                "columns": [ "name" ]
+              }
+            ],
+            "order_by": [{"column" : "first_release_date_year", "order": "desc"},
+                         {"column" : "first_release_date_month", "order": "desc"},
+                         {"column" : "first_release_date_day", "order": "desc"} 
+                        ],
+            "limit": 10,
+            "offset": offset
+        }
+      }
+    }
+
+    $http(req).then(
+    function success(res){
+      $scope.latestReleases = res.data
+      $scope.currentOffset = offset;
+      console.log($scope.latestReleases);
+    },
+
+    function error(data){
+      console.log(data);
+    });
+
+  }
+
+  $scope.getLatestReleases(0);
+
+  $scope.getDate = function(release) {
+    return new Date(release.first_release_date_year, release.first_release_date_month, release.first_release_date_day);
   }
 
 }]);

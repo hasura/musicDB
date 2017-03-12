@@ -22,9 +22,9 @@
                                 </button>
                             </span>
                         </div>
-                        <span> E.g. Coldplay, Metallica</span>
+                        <span> E.g. <i>Coldplay</i>, <i>Metallica</i></span>
                     </div>
-                    <div ng-hide="artistPresent" class="row list-result" ng-repeat="row in artistResults">
+                    <div ng-hide="artistPresent" class="list-result" ng-repeat="row in artistResults">
                         <a href ng-click="getArtist(row.id)">{{row.name}}</a>
                     </div>
 
@@ -57,8 +57,8 @@
                     </div> 
                 </div>
 
-            <div class="col-md-4">
-                <pre>This is a search query</pre>
+            <div class="col-md-4 well">
+                <p>This is a search query</p>
             </div>    
         </div>
 
@@ -110,32 +110,50 @@
                 </div>
             </div>
 
-            <div class="col-md-4">
-                <pre>This shows a multi query to display data from 2 tables</pre>
+            <div class="col-md-4 well">
+                <p>This shows a multi query to display data from 2 tables. Traditonally, you may have to use two queries to do this kind of operation.</p>
             </div>
         </div>
 
         <div class="row section">
                 <div class="col-md-8">
                     <h2>Recent Additions</h2>
+                    <ul class="pagination">
+                        <li><a href ng-click="getLatestReleases(currentOffset - 10)">&laquo;</a></li>
+                        <li><a href ng-click="getLatestReleases(currentOffset + 10)">&raquo;</a></li>
+                    </ul>
+                    <table class="table">
+                    <thead>
+                        <tr>
+                            <th> Album </th>
+                            <th> Artist </th>
+                            <th> Release Date </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="release in latestReleases">
+                            <td> {{release.parent.name}} </td>
+                            <td> {{release.parent.artist.name}} </td>
+                            <td> {{ getDate(release) | date }} </td>
+                        </tr>
+                    </tbody>
+                    </table>
                 </div>
 
-                <div class="col-md-4">
-                    <pre> This is another query</pre>
+                <div class="col-md-4 well">
+                    <p> This is another query to show the implementation of pagination</p>
                 </div>
         </div>            
-
 
         <div class="row section">
             <div class="col-md-8">
                 <h2>Analytics</h2>
             </div>
 
-            <div clas="col-md-4">
-                <pre>This is another query </pre>
+            <div class="col-md-4 well">
+                <p>This is another query to show how a complex join query can be easily accessed using view</p>
             </div>
         </div>
-
 
     </div>
 
