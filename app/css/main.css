@@ -15,8 +15,10 @@
   margin-bottom: 20px;
 }
 
+.extra-pad {
+    margin-top: 40px;
+}
 
-.my-pagination > li > a {
-  padding: 6px 12px;
-  border: 1px solid #ddd;
+.well {
+    font-family: monospace;
 }

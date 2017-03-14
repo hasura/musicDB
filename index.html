@@ -9,6 +9,15 @@
 <body ng-controller="PageCtrl">
 
     <div class="container">
+
+        <div class="row section">
+            <div class="col-md-12">
+                <div class="well">
+                    <p>Welcome to HMDB - Hasura Music Database</p>
+                    <p>Using the corpus from <a href="https://musicbrainz.org/"> Musicbrainz </a>, we have been able to build this app solely using Hasura's Data APIs without any server code.</p>
+                    </div>
+            </div>
+        </div>
         
         <div class="row section">
             <div class="col-md-8">
@@ -29,6 +38,7 @@
                     </div>
 
                     <div ng-show="artistPresent">
+                        <a href ng-click="artistPresent=!artistPresent;">&larr; Back</a>
                         <h3> {{artist.name}} </h3>
                         <ul class="list-inline">
                            <li ng-repeat="tag in artist.tags"> {{tag.name}} </li>
@@ -46,7 +56,7 @@
                             <tr ng-repeat="release in artist.release_groups">
                                 <td> {{release.meta.first_release_date_year}} </td>
                                 <td> {{release.name}} </td>
-                                <td> {{release.meta.rating}} </td>
+                                <td> {{release.meta.rating || "-"}} </td>
                             </tr>
                         </tbody>
                         </table>
@@ -57,23 +67,35 @@
                     </div> 
                 </div>
 
-            <div class="col-md-4 well">
-                <p>This is a search query</p>
+            <div class="col-md-4 well extra-pad">
+                <p>This is a search query. This is the POST data: </p>
+                <pre>
+    {
+      type: "select",
+      args: {
+        "table": "artist",
+        "columns": ["id", "name"],
+        "where": { "name": { "$ilike": "%"+artist+"%" }
+                 },
+        "limit": 10
+      }
+    }
+                </pre>
+                <p> Hasura provides extensive filters like "$eq", "$ne", "$in", "$nin", "$gt", "$lt", "$gte", "$lte" and <a href="https://hasura.io/_docs/platform/0.6/ref/data/reference.html">many more</a></p>
             </div>    
         </div>
 
         <div class="row section">
             <div class="col-md-8">
                 <h2>Tags</h2>
-                <div ng-show="!tagExpanded" class="tag-cloud">
+                <div class="tag-cloud">
                     <ul class="list-inline">
-                       <li ng-repeat="tag in tagCloud"> <a href ng-click="getTagDetails(tag.id)">{{tag.name}}</a></li>
+                       <li ng-repeat="tag in tagCloud"> <a href ng-click="getTagDetails(tag)">{{tag.name}}</a></li>
                     </ul>
                 </div>
 
-                <div ng-show="tagExpanded">
-                    <a href ng-click="tagExpanded=!tagExpanded;">&larr; All tags</a>
-                    <h4>Tag: {{tagDetails.name}}</h4>
+                <div>
+                    <h4>Tag: {{selectedTag.name}}</h4>
 
                     <div class="row">
                         <div class="col-md-6">
@@ -110,8 +132,52 @@
                 </div>
             </div>
 
-            <div class="col-md-4 well">
-                <p>This shows a multi query to display data from 2 tables. Traditonally, you may have to use two queries to do this kind of operation.</p>
+            <div class="col-md-4 well extra-pad">
+                <p>Hasura supports multi-queries. This means with a single HTTP request, you can get data from multiple tables.</p>
+                <p>Click on one of the tags to see an example. This is the POST data: <p>
+                <pre>
+    var tagDetailQuery = {
+      "type": "bulk",
+      "args": [
+        {
+          "type": "select",
+          "args": {
+            "table": "artist_tag",
+            "columns": [
+              "artist",
+              "tag",
+              "count",
+              {
+                "name": "artist_details",
+                "columns": ["id", "name"]
+              }
+            ],
+            "where": {"tag": tagId},
+            "order_by": "-count",
+            "limit" : 10,
+          }
+        },
+        {
+          "type": "select",
+          "args": {
+            "table": "event_tag",
+            "columns": [
+              "event",
+              "tag",
+              "count",
+              {
+                "name": "event_details",
+                "columns": ["id", "name"]
+              }
+            ],
+            "where": {"tag": tagId},
+            "order_by": "-count",
+            "limit" : 10,
+          }
+        }
+      ]
+    }
+                </pre>
             </div>
         </div>
 
@@ -140,8 +206,37 @@
                     </table>
                 </div>
 
-                <div class="col-md-4 well">
-                    <p> This is another query to show the implementation of pagination</p>
+                <div class="col-md-4 well extra-pad">
+                    <p>Hasura supports arbitrary nesting of relationships. Here, we show an example implementation of pagination which is a 3-way join.</p>
+                    <p>Also, note the "where" clause for filtering based on arbitrary-depth relationships</p>
+                    <p>Here is the POST data: </p>
+                    <pre>
+    "type": "select",
+    "args": {
+      "table": "release_group_meta",
+      "columns": [
+        "id",
+        "first_release_date_year",
+        "first_release_date_month",
+        "first_release_date_day",
+        {
+          "name": "parent",
+          "columns": [
+            "name",
+            "artist_credit",
+            { "name" : "artist",
+              "columns": ["id", "name"]
+            }]
+        }
+      ],
+      "order_by": [{"column" : "first_release_date_year", "type": "desc", "nulls": "last"},
+                   {"column" : "first_release_date_month", "type": "desc", "nulls": "last"},
+                   {"column" : "first_release_date_day", "type": "desc", "nulls": "last"}
+                  ],
+      "where": { "parent": { "artist": { "name" : { "$neq" : null  } } } },
+      "limit": 10,
+      "offset": offset
+                    </pre>
                 </div>
         </div>            
 
@@ -152,8 +247,18 @@
 
             </div>
 
-            <div class="col-md-4 well">
-                <p>This is another query to show how a complex join query can be easily accessed using view. We have also created a manual relationship with this view to the tag table.</p>
+            <div class="col-md-4 well extra-pad">
+                <p>Use Hasura for any kind of SQL operations.</p>
+                <p>Here, we show a complex join query which is used for analytics. With the help of views, we can easily access this using Hasura BaaS.</p>
+                <pre>
+    {
+      "type": "select",
+      "args": {
+          "table": "tag_stats_view",
+          "columns": [ "*.*"],
+      }
+    }
+                </pre>
             </div>
         </div>
 

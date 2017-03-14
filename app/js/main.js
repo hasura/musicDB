@@ -26,7 +26,6 @@ app.controller('PageCtrl', ['$scope', '$location', '$http', function ($scope, $l
   }
 
   $scope.searchArtist = function(artist) {
-    console.log("inside searchArtist");
 
     $scope.artistPresent = false;
 
@@ -42,18 +41,15 @@ app.controller('PageCtrl', ['$scope', '$location', '$http', function ($scope, $l
 
     $http(wrapQuery(searchArtistQuery)).then(
     function success(res){
-      console.log(res);
       $scope.artistResults = res.data;
     },
 
     function error(data){
-      console.log(data);
     });
   }
 
 
   $scope.getArtist = function(artistId) {
-    console.log("getting artist");
 
     $scope.artistPresent = true;
 
@@ -95,14 +91,12 @@ app.controller('PageCtrl', ['$scope', '$location', '$http', function ($scope, $l
 
     $http(wrapQuery(getArtistQuery)).then(
     function success(res){
-      console.log(res);
       var data = res.data[0];
 
       $scope.artist = res.data[0];
     },
 
     function error(data){
-      console.log(data);
     });
   }
 
@@ -141,16 +135,14 @@ app.controller('PageCtrl', ['$scope', '$location', '$http', function ($scope, $l
     },
 
     function error(data){
-      console.log(data);
     });
 
   }
 
 
-  $scope.getTagDetails = function(tagId) {
+  $scope.getTagDetails = function(tagObj) {
 
-    console.log("inside tag id");
-    console.log(tagId);
+    $scope.selectedTag = tagObj;
 
     var tagDetailQuery = {
       "type": "bulk",
@@ -168,7 +160,7 @@ app.controller('PageCtrl', ['$scope', '$location', '$http', function ($scope, $l
                 "columns": ["id", "name"]
               }
             ],
-            "where": {"tag": tagId},
+            "where": {"tag": tagObj.id},
             "order_by": "-count",
             "limit" : 10,
           }
@@ -186,7 +178,7 @@ app.controller('PageCtrl', ['$scope', '$location', '$http', function ($scope, $l
                 "columns": ["id", "name"]
               }
             ],
-            "where": {"tag": tagId},
+            "where": {"tag": tagObj.id},
             "order_by": "-count",
             "limit" : 10,
           }
@@ -199,11 +191,9 @@ app.controller('PageCtrl', ['$scope', '$location', '$http', function ($scope, $l
       $scope.tagExpanded = true;
       $scope.artistsTag = res.data[0];
       $scope.eventsTag = res.data[1];
-      console.log(res.data);
     },
 
     function error(data){
-      console.log(data);
     });
 
   }
@@ -244,11 +234,9 @@ app.controller('PageCtrl', ['$scope', '$location', '$http', function ($scope, $l
     function success(res){
       $scope.latestReleases = res.data
       $scope.currentOffset = offset;
-      console.log($scope.latestReleases);
     },
 
     function error(data){
-      console.log(data);
     });
 
   }
@@ -270,8 +258,6 @@ app.controller('PageCtrl', ['$scope', '$location', '$http', function ($scope, $l
     $http(wrapQuery(analyticsQuery)).then(
 
     function success(res){
-      console.log('inside analytics');
-      console.log(res.data);
 
       var data = res.data;
       var formattedData = {};
@@ -284,8 +270,6 @@ app.controller('PageCtrl', ['$scope', '$location', '$http', function ($scope, $l
           formattedData[r.tag] = {"label": r.tag_details.name, "data": [{x: r.first_release_date_year, y: r.count, backgroundColor: 'rgba(123,0,0,0.1)'}]}
         }
       })
-
-      console.log(formattedData);
 
       var ctx = $("#myChart");
 
@@ -306,7 +290,6 @@ app.controller('PageCtrl', ['$scope', '$location', '$http', function ($scope, $l
    },
 
     function error(data){
-      console.log(data);
     });
   }
 
@@ -315,5 +298,6 @@ app.controller('PageCtrl', ['$scope', '$location', '$http', function ($scope, $l
   $scope.getAnalytics();
   $scope.getLatestReleases(0);
   $scope.getPopularTags();
+  $scope.getTagDetails({id: 7, name: "rock"});
 
 }]);
