@@ -35,7 +35,7 @@ app.controller('PageCtrl', ['$scope', '$location', '$http', function ($scope, $l
       args: {
         "table": "artist",
         "columns": ["id", "name"],
-        "where": {"name": {"$like": "%"+artist+"%" }},
+        "where": {"name": {"$ilike": "%"+artist+"%" }},
         "limit": 10
       }
     }
@@ -80,12 +80,13 @@ app.controller('PageCtrl', ['$scope', '$location', '$http', function ($scope, $l
                   "name": "meta",
                   "columns": ["first_release_date_year", "rating"]
                 }],
-              // "order_by": [{
-              //   "column" : "meta.first_release_date_year",
-              //   "order": "desc",
-              //   "nulls" : "last"
-              // }],
-//                "where" : {"meta" : { "$not" : {"first_release_date_year": null}}}
+              //  "order_by": [{
+              //    "column" : "meta.first_release_date_year",
+              //    "type": "desc",
+              //    "nulls" : "last"
+              //  }],
+              "order_by": "-meta.first_release_date_year",
+              "where" : {"$not" : { "meta" : {"first_release_date_year": null}}}
             }
           ],
          "where": {"id": artistId }
@@ -222,15 +223,18 @@ app.controller('PageCtrl', ['$scope', '$location', '$http', function ($scope, $l
               "name": "parent",
               "columns": [
                 "name",
+                "artist_credit",
                 {"name" : "artist",
                  "columns": ["id", "name"]
                 }]
             }
           ],
-          "order_by": [{"column" : "first_release_date_year", "order": "desc"},
-                       {"column" : "first_release_date_month", "order": "desc"},
-                       {"column" : "first_release_date_day", "order": "desc"}
+          "order_by": [{"column" : "first_release_date_year", "type": "desc", "nulls": "last"},
+                       {"column" : "first_release_date_month", "type": "desc", "nulls": "last"},
+                       {"column" : "first_release_date_day", "type": "desc", "nulls": "last"}
                       ],
+//          "order_by" : ["-first_release_date_year", "-first_release_date_month", "-first_release_date_day"],
+          "where": { "parent": { "artist": { "name" : { "$neq" : null  } } } },
           "limit": 10,
           "offset": offset
       }
