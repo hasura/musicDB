@@ -56,3 +56,6 @@
 {
   float: right;
 }
+
+.well > pre {
+    background-color: #fff;
