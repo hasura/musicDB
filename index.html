@@ -7,10 +7,30 @@
     <link rel="stylesheet" href="app/css/main.css">
 </head>
 <body ng-controller="PageCtrl">
-
+    <div class="header">
+      <div class="container">
+        <div class="header_wrapper">
+          <div class="col-md-4">
+            <a href="https://hasura.io?utm_source=compare_header_logo" target="_blank">
+              <div class="logo">
+                <img class="narak" class="img-responsive" src="/images/narak.svg">
+                <img class="hasura" class"img-responsive"="" src="/images/new-logo.svg">
+              </div>
+            </a>
+          </div>
+          <div class="col-md-4">
+            <div class="hidden-xs hidden-sm title">Hasura vs. Others</div>
+          </div>
+          <div class="col-md-4">
+            <div class="explore" class="hidden-xs hidden-sm">
+              <a href="https://explore.beta.hasura.io?utm_source=compare_header_link" target="_blank" class="btn btn-danger">Explore Hasura</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="container">
-
-        <div class="row section">
+        <div class="row section section_mar">
             <div class="col-md-12">
                 <div class="well">
                     <p>Welcome to HMDB - Hasura Music Database</p>
@@ -18,7 +38,7 @@
                     </div>
             </div>
         </div>
-        
+
         <div class="row section">
             <div class="col-md-8">
                     <h2>Search artist</h2>
@@ -64,10 +84,11 @@
 
                     <div ng-show="artistResults.length == 0 && !artistPresent" class="list-result">
                         <span> Sorry, no artist found </span>
-                    </div> 
+                    </div>
                 </div>
 
-            <div class="col-md-4 well extra-pad">
+            <div class="col-md-4">
+              <div class="well extra-pad">
                 <p>This is a search query. This is the POST data: </p>
                 <pre>
     {
@@ -82,7 +103,8 @@
     }
                 </pre>
                 <p> Hasura provides extensive filters like "$eq", "$ne", "$in", "$nin", "$gt", "$lt", "$gte", "$lte" and <a href="https://hasura.io/_docs/platform/0.6/ref/data/reference.html">many more</a></p>
-            </div>    
+              </div>
+            </div>
         </div>
 
         <div class="row section">
@@ -132,7 +154,8 @@
                 </div>
             </div>
 
-            <div class="col-md-4 well extra-pad">
+            <div class="col-md-4">
+              <div class="well extra-pad">
                 <p>Hasura supports multi-queries. This means with a single HTTP request, you can get data from multiple tables.</p>
                 <p>Click on one of the tags to see an example. This is the POST data: <p>
                 <pre>
@@ -179,6 +202,7 @@
     }
                 </pre>
             </div>
+          </div>
         </div>
 
         <div class="row section">
@@ -206,7 +230,8 @@
                     </table>
                 </div>
 
-                <div class="col-md-4 well extra-pad">
+                <div class="col-md-4">
+                  <div class="well extra-pad">
                     <p>Hasura supports arbitrary nesting of relationships. Here, we show an example implementation of pagination which is a 3-way join.</p>
                     <p>Also, note the "where" clause for filtering based on arbitrary-depth relationships</p>
                     <p>Here is the POST data: </p>
@@ -238,7 +263,8 @@
       "offset": offset
                     </pre>
                 </div>
-        </div>            
+              </div>
+        </div>
 
         <div class="row section">
             <div class="col-md-8">
@@ -247,7 +273,8 @@
 
             </div>
 
-            <div class="col-md-4 well extra-pad">
+            <div class="col-md-4">
+              <div class="well extra-pad">
                 <p>Use Hasura for any kind of SQL operations.</p>
                 <p>Here, we show a complex join query which is used for analytics. With the help of views, we can easily access this using Hasura BaaS.</p>
                 <pre>
@@ -260,6 +287,7 @@
     }
                 </pre>
             </div>
+          </div>
         </div>
 
     </div>
