@@ -1,14 +1,19 @@
 #!/bin/bash
 
+#Make sure PGPASSWORD environment variable is set
+
+if [ -z "$1" ]
+then
+    echo "Usage: ./populate.sh <absolute_path_of_dump_dir>"
+    exit 1
+fi
+
 echo "Loading dumps from directory: $1"
 
 DB_HOST=localhost
-DB_PORT=5433
+DB_PORT=5432
 DB_NAME=hasuradb
 DB_USER=admin
-DB_PASS=deviate-infallible-sprint
-
-export PGPASSWORD=$DB_PASS
 
 cd $1
 

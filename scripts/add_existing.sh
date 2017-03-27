@@ -1,10 +1,16 @@
 #!/bin/bash
 
+if [ -z "$1" ]
+then
+    echo "Usage: ./add_existing.sh <absolute_path_of_dump_dir>"
+    exit 1
+fi
+
 echo "Loading list of tables from: $1"
 
 tables=$(cat $1)
 
-admin_token='Bearer hfz9zj02j7k9n1i98ml8e2evwzqyxhgc'
+admin_token='Bearer <insert_admin_token>'
 url='https://data.carve65.hasura-app.io/v1/query'
 
 for f in $tables; do
