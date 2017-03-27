@@ -1,0 +1,70 @@
+{ "type": "bulk"
+  "args" : [
+    {
+        "type": "create_object_relationship",
+        "args": {
+            "table": "artist",
+            "name": "artist_type",
+            "using": {
+                "foreign_key_constraint_on" : "type"
+            }
+        }
+    },
+    {
+        "type": "create_object_relationship",
+        "args": {
+            "table": "artist_tag",
+            "name": "artist_details",
+            "using": {
+                "foreign_key_constraint_on" : "artist"
+            }
+       }
+    },
+    {
+        "type": "create_object_relationship",
+        "args": {
+            "table": "release_group",
+            "name": "meta",
+            "using": {
+                "manual_configuration": {
+                    "remote_table": "release_group_meta", "column_mapping": {"id": "id"}
+                }
+            }
+        }
+    },
+    {
+        "type": "create_object_relationship",
+        "args": {
+            "table": "release_group",
+            "name": "artist",
+            "using": {
+                "manual_configuration": {
+                    "remote_table": "artist", "column_mapping": {"artist_credit": "id"}
+                }
+            }
+        }
+    },
+    {
+        "type": "create_object_relationship",
+        "args": {
+            "table": "release_group_meta",
+            "name": "parent",
+            "using": {
+                "foreign_key_constraint_on" : "id"
+            }
+        }
+    },
+    {
+        "type": "create_array_relationship",
+        "args": {
+            "table": "artist",
+            "name": "release_groups",
+            "using": {
+                "manual_configuration": {
+                    "remote_table": "release_group", "column_mapping": {"id": "artist_credit"}
+                }
+            }
+        }
+    }
+    ]
+}

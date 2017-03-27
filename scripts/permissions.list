@@ -1,0 +1,69 @@
+{
+  "type": "bulk",
+  "args": [
+  {
+      "type": "create_select_permission",
+      "args": {
+        "table": "artist",
+        "role": "anonymous",
+        "permission": {"filter": {}, "columns": ["id", "gid", "name", "sort_name", "begin_date_year", "begin_date_month", "begin_date_day", "end_area", "begin_area", "ended", "last_updated", "edits_pending", "comment", "gender", "area", "type", "end_date_day", "end_date_month", "end_date_year"]}
+      }
+  },
+  {
+      "type": "create_select_permission",
+      "args": {
+        "table": "tag",
+        "role": "anonymous",
+        "permission": {"filter": {}, "columns": ["id", "name", "ref_count"]}
+      }
+  },
+  {
+      "type": "create_select_permission",
+      "args": {
+        "table": "artist_tag",
+        "role": "anonymous",
+        "permission": {"filter": {}, "columns": ["artist", "tag", "count", "last_updated"]}
+      }
+  },
+  {
+      "type": "create_select_permission",
+      "args": {
+        "table": "artist_type",
+        "role": "anonymous",
+        "permission": {"filter": {}, "columns": ["id", "name", "parent", "child_order", "description", "gid"]}
+      }
+  },
+  {
+      "type": "create_select_permission",
+      "args": {
+        "table": "release_group",
+        "role": "anonymous",
+        "permission": {"filter": {}, "columns": ["id", "gid", "name", "artist_credit", "type", "comment", "edits_pending", "last_updated"]}
+      }
+  },
+  {
+      "type": "create_select_permission",
+      "args": {
+        "table": "event_tag",
+        "role": "anonymous",
+        "permission": {"filter": {}, "columns": ["event", "tag", "count"]}
+      }
+  },
+  {
+      "type": "create_select_permission",
+      "args": {
+        "table": "event",
+        "role": "anonymous",
+        "permission": {"filter": {}, "columns": ["id", "gid", "name", "begin_date_year", "begin_date_month", "begin_date_day", "end_date_year", "end_date_month", "end_date_day", "time", "type", "cancelled", "setlist", "comment", "edits_pending", "last_updated", "ended"]}
+      }
+  },
+  {
+      "type": "create_select_permission",
+      "args": {
+        "table": "tag_stats_view",
+        "role": "anonymous",
+        "permission": {"filter": {}, "columns": ["count", "first_release_date_year", "tag"]}
+      }
+  }
+  ]
+}
